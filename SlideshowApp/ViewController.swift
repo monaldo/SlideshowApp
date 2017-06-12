@@ -79,12 +79,16 @@ class ViewController: UIViewController {
     
     // 戻るボタンの設定
     @IBAction func rewindPicture(_ sender: Any) {
-        imageCountDown()
+        if slideshowStartStop == false {
+            imageCountDown()
+        }
     }
     
     // 進むボタンの設定
     @IBAction func forwardPicture(_ sender: Any) {
-        imageCountUp()
+        if slideshowStartStop == false {
+            imageCountUp()
+        }
     }
 
     // タイマーでの処理
