@@ -26,6 +26,9 @@ class ViewController: UIViewController {
     @IBAction func unwind(segue: UIStoryboardSegue) {
         
     }
+    
+    // スタートストップボタンの状態の初期値
+    // var buttonStatus: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,9 +47,13 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func startStopPicture(_ sender: Any) {
+    
+    @IBOutlet weak var playstopButton: UIButton!
+    
+    @IBAction func startStopPicture(_ sender: UIButton/*Any*/) {
         // slideshowStartStopに対しての動作の処理
         if slideshowStartStop == false {
+            
             // インターバルでスライドショー開始
             func starSlideshow() {
                 self.timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
@@ -59,18 +66,15 @@ class ViewController: UIViewController {
                 starSlideshow()
             }
             
+            playstopButton.setTitle("停止", for: .normal)
+            
             slideshowStartStop = true
         } else {
             self.timer.invalidate()
+            playstopButton.setTitle("再生", for: .normal)
             slideshowStartStop = false
         }
 
-    }
-
-    // 詳細にパラメータを渡す準備
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let detailImageViewController:DetailImageViewController = segue.destination as! DetailImageViewController
-        detailImageViewController.imageName = loadImages[imageNumber]
     }
     
     // 戻るボタンの設定
@@ -105,6 +109,12 @@ class ViewController: UIViewController {
     // 画像タップのアクションを定義
     func imageViewTapped(_ sender: UITapGestureRecognizer) {
         self.performSegue(withIdentifier: "detailPage", sender: self.loadImages[imageNumber])
+    }
+    
+    // 詳細にパラメータを渡す準備
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let detailImageViewController:DetailImageViewController = segue.destination as! DetailImageViewController
+        detailImageViewController.imageName = loadImages[imageNumber]
     }
 }
 
