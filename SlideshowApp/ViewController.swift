@@ -26,9 +26,6 @@ class ViewController: UIViewController {
     @IBAction func unwind(segue: UIStoryboardSegue) {
         
     }
-    
-    // スタートストップボタンの状態の初期値
-    // var buttonStatus: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,43 +46,27 @@ class ViewController: UIViewController {
 
     
     @IBOutlet weak var playstopButton: UIButton!
-    
-    @IBAction func startStopPicture(_ sender: UIButton/*Any*/) {
+    @IBAction func startStopPicture(_ sender: UIButton) {
+
         // slideshowStartStopに対しての動作の処理
         if slideshowStartStop == false {
-            
-            // インターバルでスライドショー開始
-            func starSlideshow() {
-                self.timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-            }
-            
-            if self.timer == nil {
-                starSlideshow()
-            } else {
-                self.timer.invalidate()
-                starSlideshow()
-            }
-            
-            playstopButton.setTitle("停止", for: .normal)
-            
-            slideshowStartStop = true
+            starSlideshow() // スライドショー開始
         } else {
-            self.timer.invalidate()
-            playstopButton.setTitle("再生", for: .normal)
-            slideshowStartStop = false
+            stopSlideshow() // スライドショー停止
         }
-
     }
     
     // 戻るボタンの設定
-    @IBAction func rewindPicture(_ sender: Any) {
+    @IBOutlet weak var rewindButton: UIButton!
+    @IBAction func rewindPicture(_ sender: UIButton) {
         if slideshowStartStop == false {
             imageCountDown()
         }
     }
     
     // 進むボタンの設定
-    @IBAction func forwardPicture(_ sender: Any) {
+    @IBOutlet weak var forwardButton: UIButton!
+    @IBAction func forwardPicture(_ sender: UIButton) {
         if slideshowStartStop == false {
             imageCountUp()
         }
@@ -110,9 +91,38 @@ class ViewController: UIViewController {
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.imageViewTapped(_:))))
     }
     
+    // インターバルでスライドショー開始を定義
+    func starSlideshow() {
+        self.timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        
+        // ボタンの制御
+        playstopButton.setTitle("停止", for: .normal)
+        rewindButton.isEnabled = false
+        forwardButton.isEnabled = false
+        rewindButton.setTitleColor(UIColor.darkGray, for: .normal)
+        forwardButton.setTitleColor(UIColor.darkGray, for: .normal)
+        slideshowStartStop = true
+    }
+    
+    // スライドショー停止を定義
+    func stopSlideshow() {
+        self.timer.invalidate()
+        
+        // ボタンの制御
+        playstopButton.setTitle("再生", for: .normal)
+        rewindButton.isEnabled = true
+        forwardButton.isEnabled = true
+        rewindButton.setTitleColor(UIColor.white, for: .normal)
+        forwardButton.setTitleColor(UIColor.white, for: .normal)
+        slideshowStartStop = false
+    }
+    
     // 画像タップのアクションを定義
     func imageViewTapped(_ sender: UITapGestureRecognizer) {
         self.performSegue(withIdentifier: "detailPage", sender: self.loadImages[imageNumber])
+        if slideshowStartStop != false {
+            stopSlideshow() // スライドショー停止
+        }
     }
     
     // 詳細にパラメータを渡す準備

@@ -71,8 +71,10 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="forwardButton" destination="xbc-0h-UIR" id="pMG-PH-Dwt"/>
                         <outlet property="imageView" destination="AsM-gc-YRO" id="krS-aY-Sza"/>
                         <outlet property="playstopButton" destination="4LC-ab-9gp" id="5a8-IJ-bzz"/>
+                        <outlet property="rewindButton" destination="zUk-Xw-MZn" id="iDF-sP-juG"/>
                         <segue destination="CW1-wo-grm" kind="show" identifier="detailPage" id="3MY-Al-gfz"/>
                     </connections>
                 </viewController>
